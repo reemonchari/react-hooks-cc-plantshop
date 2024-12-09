@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, within } from '@testing-library/react';
+import { render, fireEvent, within, screen } from '@testing-library/react';
 import App from '../../components/App';
 import '@testing-library/jest-dom';
 
@@ -7,11 +7,11 @@ describe('3rd Deliverable', () => {
   test('marks a plant as sold out', async () => {
     global.setFetchResponse(global.basePlants)
 
-    const { findAllByTestId, findByText } = render(<App />);
+    const { findAllByTestId } = render(<App />);
 
     // Get all plant items
     const plantItems = await findAllByTestId('plant-item');
-    expect(plantItems).toHaveLength(basePlants.length);
+    expect(plantItems).toHaveLength(global.basePlants.length);
 
     // Select the first plant item
     const firstPlantItem = plantItems[0];
@@ -21,7 +21,7 @@ describe('3rd Deliverable', () => {
     fireEvent.click(inStockButton);
 
     // Wait for the "Out of Stock" button to appear and verify its presence
-    const outOfStockButton = await findByText('Out of Stock');
+    const outOfStockButton = await screen.findByText('Out of Stock');
     expect(outOfStockButton).toBeInTheDocument();
-  });
+})
 })

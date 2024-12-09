@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import App from '../../components/App';
 import '@testing-library/jest-dom';
 
@@ -7,11 +7,13 @@ describe('4th Deliverable', () => {
   test('filters plants by name on search', async () => {
     global.setFetchResponse(global.basePlants)
     const { getByPlaceholderText, queryAllByTestId } = render(<App />);
-    const searchInput = getByPlaceholderText('Type a name to search...');
+
+    await waitFor(() => screen.getByPlaceholderText('Type a name to search...'));
+    const searchInput = screen.getByPlaceholderText('Type a name to search...');
     fireEvent.change(searchInput, { target: { value: 'aloe' } });
 
     await waitFor(() => {
-      const filteredPlants = queryAllByTestId('plant-item');
+      const filteredPlants = screen.queryAllByTestId('plant-item');
       expect(filteredPlants).toHaveLength(1);
     });
     
